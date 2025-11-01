@@ -6,6 +6,10 @@ on:
     - cron: '*/2 * * * *'
   workflow_dispatch: {}  # Allow manual trigger
 
+concurrency:
+  group: status-update
+  cancel-in-progress: true
+
 permissions:
   contents: write
 
@@ -16,6 +20,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # full history to rebase/push cleanly
       
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -54,12 +60,25 @@ jobs:
         run: |
           git config user.name "status-bot"
           git config user.email "status@users.noreply.github.com"
+          git fetch origin main
+          # Ensure we are on main and up to date before committing
+          git checkout -B main
+          git rebase origin/main || true
           git add docs/status.json docs/_headers
           
           # Only commit if there are changes
           if ! git diff --cached --quiet; then
             git commit -m "Update status [skip ci]"
-            git push
+            # First push attempt
+            if ! git push origin HEAD:main; then
+              echo "Push rejected, rebasing and retrying..."
+              git fetch origin main
+              git rebase origin/main || true
+              # Re-stage in case of rebase changes
+              git add docs/status.json docs/_headers || true
+              git commit --amend --no-edit || true
+              git push origin HEAD:main
+            fi
           else
             echo "No changes to commit"
           fi
