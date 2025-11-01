@@ -18,9 +18,7 @@ from typing import Dict, List, Optional
 
 
 # Configuration
-# TODO: Replace with your actual Railway domain
-# Example: "evolve-backend-production.up.railway.app"
-API_DOMAIN = "evolve-backend-production.up.railway.app"  # Replace with your Railway domain
+API_DOMAIN = "production.joinevolve.app"  # Replace with your Railway domain
 TIMEOUT = 5  # seconds
 CHECK_REGION = "gha"  # GitHub Actions
 
