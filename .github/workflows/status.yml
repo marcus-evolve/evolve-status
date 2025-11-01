@@ -1,0 +1,66 @@
+name: Publish status
+
+on:
+  schedule:
+    # Run every 2 minutes
+    - cron: '*/2 * * * *'
+  workflow_dispatch: {}  # Allow manual trigger
+
+permissions:
+  contents: write
+
+jobs:
+  update-status:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      
+      - name: Install dependencies
+        run: pip install httpx
+      
+      - name: Run health checks
+        run: python scripts/checks.py > docs/status.computed.json
+        continue-on-error: true  # Always proceed to merge step
+      
+      - name: Merge with override
+        run: |
+          # If override.json exists and has non-null values, merge them
+          # Otherwise just use the computed status
+          if [ -f docs/override.json ]; then
+            # Use jq to merge: computed ← override (override wins)
+            jq -s '.[0] * (.[1] | with_entries(select(.value != null)))' \
+              docs/status.computed.json docs/override.json > docs/status.json 2>/dev/null || \
+              cp docs/status.computed.json docs/status.json
+          else
+            cp docs/status.computed.json docs/status.json
+          fi
+      
+      - name: Set cache headers
+        run: |
+          # Add cache control instruction to README for Pages
+          # GitHub Pages will respect Cache-Control headers if set via _headers file
+          mkdir -p docs
+          echo "/status.json" > docs/_headers
+          echo "  Cache-Control: public, max-age=60, must-revalidate" >> docs/_headers
+      
+      - name: Commit and push if changed
+        run: |
+          git config user.name "status-bot"
+          git config user.email "status@users.noreply.github.com"
+          git add docs/status.json docs/_headers
+          
+          # Only commit if there are changes
+          if ! git diff --cached --quiet; then
+            git commit -m "Update status [skip ci]"
+            git push
+          else
+            echo "No changes to commit"
+          fi
+

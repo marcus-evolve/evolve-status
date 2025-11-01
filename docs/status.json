@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "generated_at": "2025-11-01T00:00:00Z",
+  "ttl_seconds": 120,
+  "overall": "ok",
+  "message": "",
+  "incidents": [],
+  "checks": []
+}
+
