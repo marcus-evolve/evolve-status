@@ -33,7 +33,7 @@ DEFAULT_HEADERS = {
 def check_endpoint(endpoint: Dict) -> Dict:
     name = endpoint["name"]
     url = endpoint["url"]
-
+    
     start_time = time.time()
     result = {
         "name": name,
@@ -41,7 +41,7 @@ def check_endpoint(endpoint: Dict) -> Dict:
         "latency_ms": None,
         "region": CHECK_REGION,
     }
-
+    
     try:
         monitor_url = url + ("&" if "?" in url else "?") + "monitor=1"
         response = httpx.head(monitor_url, headers=DEFAULT_HEADERS, timeout=TIMEOUT, follow_redirects=True)
@@ -49,7 +49,7 @@ def check_endpoint(endpoint: Dict) -> Dict:
             response = httpx.get(monitor_url, headers=DEFAULT_HEADERS, timeout=TIMEOUT, follow_redirects=True)
         latency_ms = int((time.time() - start_time) * 1000)
         result["latency_ms"] = latency_ms
-
+        
         if 200 <= response.status_code < 300:
             result["status"] = "ok"
         else:
@@ -86,23 +86,23 @@ def check_endpoint(endpoint: Dict) -> Dict:
             if result["status"] != "ok":
                 result["status"] = "fail"
                 result["error"] = f"HTTP {response.status_code}"
-
+            
     except httpx.TimeoutException:
         result["error"] = "Timeout"
     except httpx.ConnectError:
         result["error"] = "Connection failed"
     except Exception as e:
         result["error"] = str(e)
-
+    
     return result
 
 
 def compute_overall_status(checks: List[Dict]) -> str:
     critical_failures = sum(
-        1 for check in checks
+        1 for check in checks 
         if check.get("status") == "fail"
     )
-
+    
     if critical_failures == 0:
         return "ok"
     elif critical_failures == 1:
@@ -113,13 +113,13 @@ def compute_overall_status(checks: List[Dict]) -> str:
 
 def generate_status() -> Dict:
     checks = []
-
+    
     for endpoint in ENDPOINTS:
         check_result = check_endpoint(endpoint)
         checks.append(check_result)
-
+    
     overall = compute_overall_status(checks)
-
+    
     status_doc = {
         "version": 1,
         "generated_at": time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
@@ -129,7 +129,7 @@ def generate_status() -> Dict:
         "incidents": [],
         "checks": checks,
     }
-
+    
     return status_doc
 
 
