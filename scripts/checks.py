@@ -19,10 +19,14 @@ import os
 
 
 # Configuration
-API_DOMAIN = "production.joinevolve.app"  # Replace with your Railway domain
+# Read the primary API domain from environment (set in GitHub repo Variables)
+API_DOMAIN = os.getenv("API_DOMAIN", "").strip()
 FALLBACK_API_DOMAIN = os.getenv("FALLBACK_API_DOMAIN", "").strip()
 TIMEOUT = 5  # seconds
 CHECK_REGION = "gha"  # GitHub Actions
+
+if not API_DOMAIN:
+    raise RuntimeError("API_DOMAIN environment variable is required")
 
 ENDPOINTS = [
     {"name": "healthz", "url": f"https://{API_DOMAIN}/healthz", "critical": True},

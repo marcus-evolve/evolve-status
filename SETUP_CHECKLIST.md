@@ -13,11 +13,8 @@
 - [ ] Test status URL: `https://YOUR_USERNAME.github.io/evolve-status/status.json`
 
 ### Backend Configuration
-- [ ] Update `scripts/checks.py` with Railway domain:
-  ```python
-  API_DOMAIN = "your-app.up.railway.app"  # Replace
-  ```
-- [ ] Commit and push configuration change
+- [ ] Set repository Variable `API_DOMAIN` to your production API host (e.g., `your-api.example.com` or your Railway domain)
+- [ ] Optionally set repository Variable `FALLBACK_API_DOMAIN` to a direct host if needed to bypass WAF challenges
 - [ ] Test health endpoints manually:
   ```bash
   curl https://YOUR_DOMAIN/healthz

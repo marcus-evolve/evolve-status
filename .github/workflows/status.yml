@@ -17,6 +17,8 @@ jobs:
   update-status:
     runs-on: ubuntu-latest
     env:
+      # Set in repo "Variables" as API_DOMAIN to avoid hardcoding domains in code
+      API_DOMAIN: ${{ vars.API_DOMAIN }}
       # Optional: set in repo "Variables" as FALLBACK_API_DOMAIN to bypass WAF using direct host
       FALLBACK_API_DOMAIN: ${{ vars.FALLBACK_API_DOMAIN }}
     

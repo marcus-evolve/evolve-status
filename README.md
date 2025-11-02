@@ -17,9 +17,8 @@ This repository hosts the status page infrastructure for Evolve, providing real-
    - Save
 
 2. **Configure API Domain**:
-   - Edit `scripts/checks.py` and replace the placeholder with your actual Railway domain
-   - Example: `evolve-backend-production.up.railway.app`
-   - You can find this in your Railway project dashboard
+   - Set repository Variable `API_DOMAIN` to your production API host (e.g., `your-api.example.com` or your Railway domain)
+   - Optionally set `FALLBACK_API_DOMAIN` as a repository Variable to a direct host if needed to bypass WAF challenges
 
 3. **Test Workflow**:
    - Go to Actions tab
@@ -116,7 +115,7 @@ When resolved:
 
 ## Troubleshooting
 
-- **Checks failing**: Verify API domain in `scripts/checks.py`
+- **Checks failing**: Verify `API_DOMAIN` is set in repository Variables
 - **Pages not updating**: Check Actions tab for workflow errors
 - **404 on status.json**: Ensure GitHub Pages is enabled and deployed from `/docs`
 
