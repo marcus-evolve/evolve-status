@@ -16,6 +16,9 @@ permissions:
 jobs:
   update-status:
     runs-on: ubuntu-latest
+    env:
+      # Optional: set in repo "Variables" as FALLBACK_API_DOMAIN to bypass WAF using direct host
+      FALLBACK_API_DOMAIN: ${{ vars.FALLBACK_API_DOMAIN }}
     
     steps:
       - name: Checkout repository
