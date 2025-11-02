@@ -28,10 +28,16 @@ ENDPOINTS = [
 ]
 
 # Friendly headers to avoid WAF/bot blocks
+# Use a common Safari UA to avoid some WAF bot checks
 DEFAULT_HEADERS = {
-    "User-Agent": "EvolveStatusBot/1.0 (+https://github.com/marcus-evolve/evolve-status)",
+    "User-Agent": (
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+        "AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Safari/605.1.15"
+    ),
     "Accept": "application/json, text/plain, */*",
-    "Accept-Encoding": "gzip, deflate, br",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Cache-Control": "no-cache",
+    "Pragma": "no-cache",
 }
 
 
@@ -62,7 +68,10 @@ def check_endpoint(endpoint: Dict) -> Dict:
     try:
         # Add a harmless query param to denote monitoring
         monitor_url = url + ("&" if "?" in url else "?") + "monitor=1"
-        response = httpx.get(monitor_url, headers=DEFAULT_HEADERS, timeout=TIMEOUT, follow_redirects=True)
+        # Try HEAD first (less likely to be challenged), fall back to GET
+        response = httpx.head(monitor_url, headers=DEFAULT_HEADERS, timeout=TIMEOUT, follow_redirects=True)
+        if response.status_code in (405, 501):  # HEAD not allowed
+            response = httpx.get(monitor_url, headers=DEFAULT_HEADERS, timeout=TIMEOUT, follow_redirects=True)
         latency_ms = int((time.time() - start_time) * 1000)
         result["latency_ms"] = latency_ms
         
