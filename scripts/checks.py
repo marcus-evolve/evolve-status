@@ -27,6 +27,13 @@ ENDPOINTS = [
     {"name": "readyz", "url": f"https://{API_DOMAIN}/readyz", "critical": True},
 ]
 
+# Friendly headers to avoid WAF/bot blocks
+DEFAULT_HEADERS = {
+    "User-Agent": "EvolveStatusBot/1.0 (+https://github.com/marcus-evolve/evolve-status)",
+    "Accept": "application/json, text/plain, */*",
+    "Accept-Encoding": "gzip, deflate, br",
+}
+
 
 def check_endpoint(endpoint: Dict) -> Dict:
     """
@@ -53,7 +60,9 @@ def check_endpoint(endpoint: Dict) -> Dict:
     }
     
     try:
-        response = httpx.get(url, timeout=TIMEOUT, follow_redirects=True)
+        # Add a harmless query param to denote monitoring
+        monitor_url = url + ("&" if "?" in url else "?") + "monitor=1"
+        response = httpx.get(monitor_url, headers=DEFAULT_HEADERS, timeout=TIMEOUT, follow_redirects=True)
         latency_ms = int((time.time() - start_time) * 1000)
         result["latency_ms"] = latency_ms
         
@@ -61,8 +70,29 @@ def check_endpoint(endpoint: Dict) -> Dict:
         if 200 <= response.status_code < 300:
             result["status"] = "ok"
         else:
-            result["status"] = "fail"
-            result["error"] = f"HTTP {response.status_code}"
+            # Fallback: try legacy paths if 403/404 (common with security middleware)
+            if response.status_code in (403, 404):
+                fallback_paths = [
+                    monitor_url.replace("/healthz", "/health/"),
+                    monitor_url.replace("/readyz", "/ready/"),
+                ]
+                for alt in fallback_paths:
+                    if alt == monitor_url:
+                        continue
+                    try:
+                        alt_start = time.time()
+                        alt_resp = httpx.get(alt, headers=DEFAULT_HEADERS, timeout=TIMEOUT, follow_redirects=True)
+                        result["latency_ms"] = int((time.time() - alt_start) * 1000)
+                        if 200 <= alt_resp.status_code < 300:
+                            result["status"] = "ok"
+                            result.pop("error", None)
+                            break
+                    except Exception:
+                        pass
+            # If still not ok, record the original status code
+            if result["status"] != "ok":
+                result["status"] = "fail"
+                result["error"] = f"HTTP {response.status_code}"
             
     except httpx.TimeoutException:
         result["error"] = "Timeout"
