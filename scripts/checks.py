@@ -15,10 +15,12 @@ import time
 import json
 import sys
 from typing import Dict, List, Optional
+import os
 
 
 # Configuration
 API_DOMAIN = "production.joinevolve.app"  # Replace with your Railway domain
+FALLBACK_API_DOMAIN = os.getenv("FALLBACK_API_DOMAIN", "").strip()
 TIMEOUT = 5  # seconds
 CHECK_REGION = "gha"  # GitHub Actions
 
@@ -98,6 +100,19 @@ def check_endpoint(endpoint: Dict) -> Dict:
                             break
                     except Exception:
                         pass
+            # If still not ok, try fallback domain if provided
+            if result["status"] != "ok" and FALLBACK_API_DOMAIN:
+                try:
+                    alt_url = monitor_url.replace(API_DOMAIN, FALLBACK_API_DOMAIN)
+                    alt_start = time.time()
+                    alt_resp = httpx.get(alt_url, headers=DEFAULT_HEADERS, timeout=TIMEOUT, follow_redirects=True)
+                    result["latency_ms"] = int((time.time() - alt_start) * 1000)
+                    if 200 <= alt_resp.status_code < 300:
+                        result["status"] = "ok"
+                        result.pop("error", None)
+                except Exception:
+                    pass
+
             # If still not ok, record the original status code
             if result["status"] != "ok":
                 result["status"] = "fail"
