@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2025-11-02T10:12:12Z",
+  "generated_at": "2025-11-02T10:31:46Z",
   "ttl_seconds": 120,
   "overall": "outage",
   "message": "",
@@ -9,14 +9,14 @@
     {
       "name": "healthz",
       "status": "fail",
-      "latency_ms": 483,
+      "latency_ms": 726,
       "region": "gha",
       "error": "HTTP 403"
     },
     {
       "name": "readyz",
       "status": "fail",
-      "latency_ms": 66,
+      "latency_ms": 60,
       "region": "gha",
       "error": "HTTP 403"
     }
