@@ -69,8 +69,9 @@ def check_endpoint(endpoint: Dict) -> Dict:
                             result["status"] = "ok"
                             result.pop("error", None)
                             break
-                    except Exception:
-                        pass
+                    except (httpx.TimeoutException, httpx.ConnectError, httpx.RequestError):
+                        # Fallback path failed, continue to next alternative
+                        continue
             if result["status"] != "ok" and FALLBACK_API_DOMAIN:
                 try:
                     alt_url = monitor_url.replace(API_DOMAIN, FALLBACK_API_DOMAIN)
@@ -80,7 +81,8 @@ def check_endpoint(endpoint: Dict) -> Dict:
                     if 200 <= alt_resp.status_code < 300:
                         result["status"] = "ok"
                         result.pop("error", None)
-                except Exception:
+                except (httpx.TimeoutException, httpx.ConnectError, httpx.RequestError):
+                    # Fallback domain failed, continue with original result
                     pass
 
             if result["status"] != "ok":
@@ -91,8 +93,15 @@ def check_endpoint(endpoint: Dict) -> Dict:
         result["error"] = "Timeout"
     except httpx.ConnectError:
         result["error"] = "Connection failed"
+    except httpx.RequestError as e:
+        # Catch any other httpx request-related errors
+        result["error"] = f"Request error: {str(e)}"
+    except (ValueError, TypeError, KeyError) as e:
+        # Catch data processing errors
+        result["error"] = f"Data error: {str(e)}"
     except Exception as e:
-        result["error"] = str(e)
+        # Catch any truly unexpected errors (should be rare)
+        result["error"] = f"Unexpected error: {str(e)}"
     
     return result
 
@@ -138,7 +147,8 @@ def main():
         status = generate_status()
         print(json.dumps(status, indent=2))
         return 0
-    except Exception as e:
+    except (ValueError, TypeError, KeyError, OSError) as e:
+        # Catch expected errors from data processing or system operations
         error_status = {
             "version": 1,
             "generated_at": time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
@@ -152,7 +162,28 @@ def main():
                     "status": "fail",
                     "latency_ms": None,
                     "region": CHECK_REGION,
-                    "error": str(e),
+                    "error": f"System error: {str(e)}",
+                }
+            ],
+        }
+        print(json.dumps(error_status, indent=2))
+        return 1
+    except Exception as e:
+        # Catch any truly unexpected errors (should be rare)
+        error_status = {
+            "version": 1,
+            "generated_at": time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
+            "ttl_seconds": 120,
+            "overall": "outage",
+            "message": "Status check script error",
+            "incidents": [],
+            "checks": [
+                {
+                    "name": "script",
+                    "status": "fail",
+                    "latency_ms": None,
+                    "region": CHECK_REGION,
+                    "error": f"Unexpected error: {str(e)}",
                 }
             ],
         }
