@@ -2,7 +2,7 @@ import httpx
 import time
 import json
 import sys
-from typing import Dict, List, Optional
+from typing import Dict, List
 import os
 
 API_DOMAIN = os.getenv("API_DOMAIN", "").strip()
@@ -99,9 +99,9 @@ def check_endpoint(endpoint: Dict) -> Dict:
     except (ValueError, TypeError, KeyError) as e:
         # Catch data processing errors
         result["error"] = f"Data error: {str(e)}"
-    except Exception as e:
-        # Catch any truly unexpected errors (should be rare)
-        result["error"] = f"Unexpected error: {str(e)}"
+    except OSError as e:
+        # Catch system-level errors (e.g., from time.time())
+        result["error"] = f"System error: {str(e)}"
     
     return result
 
