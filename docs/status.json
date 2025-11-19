@@ -1,22 +1,24 @@
 {
   "version": 1,
-  "generated_at": "2025-11-19T07:42:31Z",
+  "generated_at": "2025-11-19T07:50:57Z",
   "ttl_seconds": 120,
-  "overall": "ok",
+  "overall": "outage",
   "message": "",
   "incidents": [],
   "checks": [
     {
       "name": "healthz",
-      "status": "ok",
-      "latency_ms": 193,
-      "region": "gha"
+      "status": "fail",
+      "latency_ms": 55,
+      "region": "gha",
+      "error": "HTTP 403"
     },
     {
       "name": "readyz",
-      "status": "ok",
-      "latency_ms": 226,
-      "region": "gha"
+      "status": "fail",
+      "latency_ms": 43,
+      "region": "gha",
+      "error": "HTTP 403"
     }
   ]
 }
