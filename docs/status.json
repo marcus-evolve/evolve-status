@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2025-11-25T00:49:05Z",
+  "generated_at": "2025-11-25T02:25:34Z",
   "ttl_seconds": 120,
   "overall": "ok",
   "message": "",
@@ -15,7 +15,7 @@
     {
       "name": "readyz",
       "status": "ok",
-      "latency_ms": 291,
+      "latency_ms": 282,
       "region": "gha"
     }
   ]
