@@ -1,0 +1,140 @@
+.component-row {
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.component-row:last-child {
+  border-bottom: none;
+}
+
+.component-row-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 16px 20px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  color: var(--text-primary);
+  transition: background-color 0.15s ease;
+}
+
+.component-row-header:hover {
+  background: var(--bg-hover);
+}
+
+.component-row-header:focus-visible {
+  outline: 2px solid var(--accent-blue);
+  outline-offset: -2px;
+}
+
+.component-row-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.component-status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.component-status-dot--ok {
+  background: var(--accent-green);
+  box-shadow: 0 0 8px var(--accent-green);
+}
+
+.component-status-dot--degraded {
+  background: var(--accent-yellow);
+  box-shadow: 0 0 8px var(--accent-yellow);
+}
+
+.component-status-dot--outage {
+  background: var(--accent-red);
+  box-shadow: 0 0 8px var(--accent-red);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.component-name {
+  font-weight: 500;
+}
+
+.component-row-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.component-latency {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.component-chevron {
+  color: var(--text-muted);
+  transition: transform 0.2s ease;
+}
+
+.component-chevron--expanded {
+  transform: rotate(180deg);
+}
+
+.component-row-details {
+  padding: 0 20px 20px;
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.component-error {
+  margin-top: 12px;
+  padding: 10px 12px;
+  background: var(--accent-red-bg);
+  border: 1px solid var(--accent-red);
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+}
+
+.component-error-label {
+  font-weight: 600;
+  color: var(--accent-red);
+  margin-right: 6px;
+}
+
+.component-error-message {
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+}
+
+@media (max-width: 480px) {
+  .component-row-header {
+    padding: 14px 16px;
+  }
+  
+  .component-row-details {
+    padding: 0 16px 16px;
+  }
+  
+  .component-latency {
+    font-size: 0.8125rem;
+  }
+}

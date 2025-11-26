@@ -1,0 +1,94 @@
+.uptime-graph {
+  padding: 12px 0 4px;
+}
+
+.uptime-graph-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 0.75rem;
+}
+
+.uptime-graph-range {
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.uptime-percent {
+  font-weight: 600;
+  font-family: var(--font-mono);
+}
+
+.uptime-percent--ok {
+  color: var(--accent-green);
+}
+
+.uptime-percent--degraded {
+  color: var(--accent-yellow);
+}
+
+.uptime-percent--outage {
+  color: var(--accent-red);
+}
+
+.uptime-bars {
+  display: flex;
+  gap: 2px;
+  height: 32px;
+}
+
+.uptime-bar {
+  flex: 1;
+  border-radius: 3px;
+  min-width: 3px;
+  cursor: default;
+  transition: transform 0.1s ease, opacity 0.1s ease;
+  animation: barGrow 0.4s ease backwards;
+}
+
+@keyframes barGrow {
+  from {
+    transform: scaleY(0);
+    opacity: 0;
+  }
+  to {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+.uptime-bar:hover {
+  transform: scaleY(1.1);
+  opacity: 0.85;
+}
+
+.uptime-bar--ok {
+  background: var(--accent-green);
+}
+
+.uptime-bar--degraded {
+  background: var(--accent-yellow);
+}
+
+.uptime-bar--outage {
+  background: var(--accent-red);
+}
+
+.uptime-bar--unknown {
+  background: var(--border-color);
+  opacity: 0.5;
+}
+
+@media (max-width: 640px) {
+  .uptime-bars {
+    gap: 1px;
+    height: 24px;
+  }
+  
+  .uptime-bar {
+    min-width: 2px;
+    border-radius: 2px;
+  }
+}

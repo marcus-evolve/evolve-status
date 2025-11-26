@@ -1,0 +1,87 @@
+.status-banner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 24px;
+  border-radius: var(--radius-lg);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-md);
+}
+
+.status-banner--ok {
+  background: var(--accent-green-bg);
+  border-color: var(--accent-green);
+}
+
+.status-banner--degraded {
+  background: var(--accent-yellow-bg);
+  border-color: var(--accent-yellow);
+}
+
+.status-banner--outage {
+  background: var(--accent-red-bg);
+  border-color: var(--accent-red);
+}
+
+.status-icon {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+}
+
+.status-icon--ok {
+  color: var(--accent-green);
+}
+
+.status-icon--degraded {
+  color: var(--accent-yellow);
+}
+
+.status-icon--outage {
+  color: var(--accent-red);
+}
+
+.status-banner-content {
+  flex: 1;
+}
+
+.status-banner-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin-bottom: 2px;
+}
+
+.status-banner--ok .status-banner-title {
+  color: var(--accent-green);
+}
+
+.status-banner--degraded .status-banner-title {
+  color: var(--accent-yellow);
+}
+
+.status-banner--outage .status-banner-title {
+  color: var(--accent-red);
+}
+
+.status-banner-message {
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 480px) {
+  .status-banner {
+    padding: 20px;
+    gap: 12px;
+  }
+  
+  .status-icon {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .status-banner-title {
+    font-size: 1.125rem;
+  }
+}
