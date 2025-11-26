@@ -27,9 +27,10 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const cacheBuster = `?t=${Date.now()}`
         const [statusRes, historyRes] = await Promise.all([
-          fetch('./status.json'),
-          fetch('./history.json').catch(() => null),
+          fetch(`./status.json${cacheBuster}`, { cache: 'no-store' }),
+          fetch(`./history.json${cacheBuster}`, { cache: 'no-store' }).catch(() => null),
         ])
 
         if (!statusRes.ok) {
