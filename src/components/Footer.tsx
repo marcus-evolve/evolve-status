@@ -19,12 +19,9 @@ function Footer({ generatedAt }: FooterProps) {
   return (
     <footer className="footer">
       <div className="footer-inner">
-        <div className="footer-powered">
-          <span>Powered by</span>
-          <a href="https://joinevolve.app" target="_blank" rel="noopener noreferrer" className="footer-brand">
-            Evolve
-          </a>
-        </div>
+        <a href="https://joinevolve.app" target="_blank" rel="noopener noreferrer" className="footer-link">
+          Go to website
+        </a>
         
         {generatedAt && (
           <div className="footer-updated">

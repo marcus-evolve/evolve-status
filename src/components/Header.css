@@ -18,28 +18,17 @@
 .header-logo {
   display: flex;
   align-items: center;
-  gap: 10px;
   text-decoration: none;
-  color: var(--text-primary);
+  transition: opacity 0.15s ease;
 }
 
-.logo-icon {
-  width: 28px;
-  height: 28px;
+.header-logo:hover {
+  opacity: 0.8;
 }
 
-.logo-text {
-  font-size: 1.25rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-}
-
-.logo-status {
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--text-secondary);
-  padding-left: 10px;
-  border-left: 1px solid var(--border-color);
+.logo-image {
+  height: 32px;
+  width: auto;
 }
 
 .header-nav {
@@ -64,8 +53,3 @@
   color: var(--text-primary);
 }
 
-@media (max-width: 480px) {
-  .logo-status {
-    display: none;
-  }
-}

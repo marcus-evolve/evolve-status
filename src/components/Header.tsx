@@ -9,32 +9,8 @@ function Header({ children }: HeaderProps) {
   return (
     <header className="header">
       <div className="header-inner">
-        <a href="/" className="header-logo">
-          <svg className="logo-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="evolve-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#22c55e" />
-                <stop offset="50%" stopColor="#14b8a6" />
-                <stop offset="100%" stopColor="#06b6d4" />
-              </linearGradient>
-            </defs>
-            <path
-              d="M16 2L4 8v8c0 7.18 5.12 13.88 12 16 6.88-2.12 12-8.82 12-16V8L16 2z"
-              stroke="url(#evolve-grad)"
-              strokeWidth="2"
-              fill="none"
-            />
-            <path
-              d="M10 16l4 4 8-8"
-              stroke="url(#evolve-grad)"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              fill="none"
-            />
-          </svg>
-          <span className="logo-text">Evolve</span>
-          <span className="logo-status">Status</span>
+        <a href="https://joinevolve.app" className="header-logo" target="_blank" rel="noopener noreferrer">
+          <img src="./logo.png" alt="Evolve" className="logo-image" />
         </a>
         
         <nav className="header-nav">
