@@ -1,7 +1,7 @@
 /status.json
-  Cache-Control: public, max-age=60, must-revalidate
+  Cache-Control: public, max-age=30, must-revalidate
 /history.json
-  Cache-Control: public, max-age=60, must-revalidate
+  Cache-Control: public, max-age=30, must-revalidate
 /feed.xml
   Cache-Control: public, max-age=300, must-revalidate
   Content-Type: application/rss+xml
