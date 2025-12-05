@@ -7875,6 +7875,17 @@
         "status": "ok",
         "latency_ms": 442
       }
+    },
+    {
+      "timestamp": "2025-12-05T20:42:48Z",
+      "healthz": {
+        "status": "ok",
+        "latency_ms": 307
+      },
+      "readyz": {
+        "status": "ok",
+        "latency_ms": 451
+      }
     }
   ],
   "daily_summary": {
@@ -8006,16 +8017,16 @@
     },
     "2025-12-05": {
       "healthz": {
-        "up": 56,
+        "up": 57,
         "down": 0,
-        "total_latency_ms": 12657,
-        "check_count": 56
+        "total_latency_ms": 12964,
+        "check_count": 57
       },
       "readyz": {
-        "up": 56,
+        "up": 57,
         "down": 0,
-        "total_latency_ms": 16484,
-        "check_count": 56
+        "total_latency_ms": 16935,
+        "check_count": 57
       }
     }
   }
