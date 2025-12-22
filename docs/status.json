@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2025-12-22T17:26:15Z",
+  "generated_at": "2025-12-22T17:42:01Z",
   "ttl_seconds": 120,
   "overall": "ok",
   "message": "",
@@ -9,13 +9,13 @@
     {
       "name": "healthz",
       "status": "ok",
-      "latency_ms": 419,
+      "latency_ms": 165,
       "region": "gha"
     },
     {
       "name": "readyz",
       "status": "ok",
-      "latency_ms": 447,
+      "latency_ms": 262,
       "region": "gha"
     }
   ]
